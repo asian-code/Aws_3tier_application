@@ -2,6 +2,15 @@
 provider "aws" {
   region = "us-east-2"
 }
+terraform {
+  backend "s3" {
+    bucket         = "hashstudio-tf"
+    key            = "env/prod/terraform.tfstate"
+    region         = "us-east-2"
+    dynamodb_table = "tf-backend-hashstudio" 
+    encrypt        = true
+  }
+}
 
 variable "vpc_cidr" {
   default = "10.0.0.0/16"
