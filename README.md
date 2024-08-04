@@ -4,7 +4,7 @@
 This project is a 3-tier application consisting of a web front-end, an application server, and a database server. The infrastructure is managed using Terraform and deployed on AWS.
 
 ## Architecture
-- **Presentation Tier**: The front-end is built with React.js and served by an Nginx server.
+- **Presentation Tier**: The front-end is built with Node.js and Express.js.
 - **Application Tier**: The back-end is developed using Node.js and Express.js.
 - **Data Tier**: The database is managed by Amazon RDS running MySQL.
 
@@ -15,11 +15,6 @@ This project is a 3-tier application consisting of a web front-end, an applicati
 
 ## Setup Instructions
 
-### 1. Clone the Repository
-```sh
-git clone https://github.com/yourusername/3-tier-application.git
-cd 3-tier-application
-```
 
 ### 2. Configure Terraform Variables
 Create a terraform.tfvars file and add your configuration:

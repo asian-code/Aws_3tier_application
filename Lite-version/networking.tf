@@ -25,7 +25,14 @@ resource "aws_subnet" "db" {
     Name = "db_subnet"
   }
 }
-
+resource "aws_subnet" "db2" {
+  vpc_id            = aws_vpc.main.id
+  cidr_block        = "10.0.4.0/24"
+  availability_zone = "${var.main_az}b"
+  tags = {
+    Name = "db_subnet-standby"
+  }
+}
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
