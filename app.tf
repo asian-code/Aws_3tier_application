@@ -16,13 +16,13 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "web" {
-  ami           = data.aws_ami.ubuntu.id
-  instance_type = "t2.micro"
-  subnet_id     = aws_subnet.public.id
-  security_groups = [aws_security_group.public_sg.name]
+# resource "aws_instance" "web" {
+#   ami           = data.aws_ami.ubuntu.id
+#   instance_type = "t2.micro"
+#   subnet_id     = aws_subnet.public.id
+#   security_groups = [aws_security_group.public_sg.name]
 
-  tags = {
-    Name = "test web_instance"
-  }
-}
+#   tags = {
+#     Name = "test web_instance"
+#   }
+# }

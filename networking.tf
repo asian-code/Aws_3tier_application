@@ -61,7 +61,17 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.public.id
 }
 # private and db route table
-resource "aws_route_table" "private" {
+resource "aws_route_table" "app-routet" {
+  vpc_id = aws_vpc.main.id
+route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.public.id
+  }
+  tags = {
+    Name = "app_rt"
+  }
+}
+resource "aws_route_table" "db-routet" {
   vpc_id = aws_vpc.main.id
 
   tags = {
@@ -69,7 +79,26 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_route_table_association" "secure" {
+resource "aws_route_table_association" "secure_app" {
   subnet_id      = aws_subnet.private.id
-  route_table_id = aws_route_table.private.id
+  route_table_id = aws_route_table.app-routet.id
+}
+resource "aws_route_table_association" "secure_db" {
+  subnet_id      = aws_subnet.db.id
+  route_table_id = aws_route_table.db-routet.id
+}
+# Other Components 
+resource "aws_eip" "natIP" {
+  domain = "vpc"
+  tags = {
+    Name = "NAT-eip-tf"
+  }
+}
+resource "aws_nat_gateway" "public" {
+  allocation_id = aws_eip.natIP.id
+  subnet_id     = aws_subnet.public.id
+  depends_on = [aws_internet_gateway.gw]
+  tags = {
+    Name = "public-NAT-tf"
+  }
 }
