@@ -1,6 +1,6 @@
 # for security
 
-# Public SG ---
+#region Public SG ---
 resource "aws_security_group" "public_sg" {
   name        = "public-sg-tf"
   description = "inbound only to p:80,443. outbound to all, outbound to db-sg"
@@ -34,7 +34,8 @@ resource "aws_vpc_security_group_ingress_rule" "public_allow_tls_ipv4" {
   ip_protocol       = "tcp"
   to_port           = 443
 }
-# db SG ---
+#endregion 
+#region db SG ---
 resource "aws_security_group" "db_sg" {
   name        = "db-sg-tf"
   description = "inbound and outbound to public sg"
@@ -56,3 +57,4 @@ resource "aws_vpc_security_group_egress_rule" "db_allow_all_to_app" {
   ip_protocol                  = "-1" # semantically equivalent to all ports
   referenced_security_group_id = aws_security_group.public_sg.id
 }
+#endregion

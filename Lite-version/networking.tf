@@ -33,7 +33,8 @@ resource "aws_internet_gateway" "gw" {
     Name = "main_igw"
   }
 }
-# Public route table
+#region route tables
+#public 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
@@ -51,8 +52,7 @@ resource "aws_route_table_association" "public" {
   subnet_id      = aws_subnet.public.id
   route_table_id = aws_route_table.public.id
 }
-# private and db route table
-
+#db route table
 resource "aws_route_table" "db-routet" {
   vpc_id = aws_vpc.main.id
 
@@ -65,3 +65,4 @@ resource "aws_route_table_association" "secure_db" {
   subnet_id      = aws_subnet.db.id
   route_table_id = aws_route_table.db-routet.id
 }
+#endregion
