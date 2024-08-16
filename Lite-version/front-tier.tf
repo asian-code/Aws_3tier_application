@@ -1,4 +1,4 @@
-#region s3 and frontend
+#region s3 static page
 resource "aws_s3_bucket" "static_website" {
   bucket = "hashstudio-static-site"
 
@@ -64,7 +64,83 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
 output "website_endpoint" {
   value = aws_s3_bucket_website_configuration.website_config.website_endpoint
 }
-
-
 #endregion
 
+#region CloudFront Distribution
+
+resource "aws_cloudfront_distribution" "cdn" {
+  origin {
+    domain_name = aws_s3_bucket.static_website.website_endpoint
+    origin_id   = aws_s3_bucket.static_website.id
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  enabled             = true
+  is_ipv6_enabled     = true
+  default_root_object = "index.html"
+
+#   aliases = [var.domain_name]
+
+  default_cache_behavior {
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    target_origin_id = aws_s3_bucket.static_website.id
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+
+    viewer_protocol_policy = "redirect-to-https"
+    min_ttl                = 0
+    default_ttl            = 3600
+    max_ttl                = 86400
+  }
+
+  price_class = "PriceClass_100"
+
+ viewer_certificate {
+    cloudfront_default_certificate = true
+    # Remove the following lines if you're not using a custom SSL certificate
+    # acm_certificate_arn      = var.certificate_arn
+    # ssl_support_method       = "sni-only"
+    # minimum_protocol_version = "TLSv1.2_2021"
+  }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
+
+  tags = {
+    Name = "CloudFrontDistribution"
+  }
+}
+#endregion
+/*
+resource "aws_route53_record" "www" {
+  zone_id = var.hosted_zone_id
+  name    = var.domain_name
+  type    = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.cdn.domain_name
+    zone_id                = aws_cloudfront_distribution.cdn.hosted_zone_id
+    evaluate_target_health = false
+  }
+}
+/*
+*/
+# Output the CloudFront URL
+output "cloudfront_domain_name" {
+  value = aws_cloudfront_distribution.cdn.domain_name
+}
