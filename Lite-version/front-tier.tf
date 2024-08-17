@@ -3,24 +3,24 @@ resource "aws_s3_bucket" "static_website" {
   bucket = "hashstudio-static-site"
 
   tags = {
-    Name        = "hashstudio-static-site"
+    Name = "hashstudio-static-site"
   }
 }
 # upload index file to s3
 resource "aws_s3_object" "index" {
-  bucket = aws_s3_bucket.static_website.id
-  key = "index.html"
-  source = "index.html"
+  bucket       = aws_s3_bucket.static_website.id
+  key          = "index.html"
+  source       = "index.html"
   content_type = "text/html"
-  etag = filemd5("index.html")
+  etag         = filemd5("index.html")
 }
 # uplaod error file to s3
 resource "aws_s3_object" "error" {
-  bucket = aws_s3_bucket.static_website.id
-  key = "error.html"
-  source = "error.html"
+  bucket       = aws_s3_bucket.static_website.id
+  key          = "error.html"
+  source       = "error.html"
   content_type = "text/html"
-  etag = filemd5("index.html")
+  etag         = filemd5("index.html")
 }
 # S3 Web hosting
 resource "aws_s3_bucket_website_configuration" "website_config" {
@@ -49,15 +49,15 @@ resource "aws_s3_bucket_policy" "website_bucket_policy" {
     Id      = "Public_access"
     Statement = [
       {
-        Sid = "IPAllow"
-        Effect = "Allow"
+        Sid       = "IPAllow"
+        Effect    = "Allow"
         Principal = "*"
-        Action = ["s3:GetObject"]
+        Action    = ["s3:GetObject"]
         Resource  = "${aws_s3_bucket.static_website.arn}/*"
       },
     ]
   })
-  depends_on = [ aws_s3_bucket.static_website ]
+  depends_on = [aws_s3_bucket.static_website]
 }
 
 # Output the website endpoint
@@ -70,7 +70,8 @@ output "website_endpoint" {
 
 resource "aws_cloudfront_distribution" "cdn" {
   origin {
-    domain_name = aws_s3_bucket.static_website.website_endpoint
+    # domain_name = aws_s3_bucket.static_website.website_endpoint (deprecated)
+    domain_name = aws_s3_bucket.static_website.bucket_regional_domain_name
     origin_id   = aws_s3_bucket.static_website.id
 
     custom_origin_config {
@@ -84,8 +85,6 @@ resource "aws_cloudfront_distribution" "cdn" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-
-#   aliases = [var.domain_name]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
@@ -107,12 +106,20 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   price_class = "PriceClass_100"
 
- viewer_certificate {
-    cloudfront_default_certificate = true
-    # Remove the following lines if you're not using a custom SSL certificate
-    # acm_certificate_arn      = var.certificate_arn
-    # ssl_support_method       = "sni-only"
-    # minimum_protocol_version = "TLSv1.2_2021"
+  # viewer_certificate {
+  #   cloudfront_default_certificate = true
+  #   # Remove the following lines if you're not using a custom SSL certificate
+  #   # acm_certificate_arn      = var.certificate_arn
+  #   # ssl_support_method       = "sni-only"
+  #   # minimum_protocol_version = "TLSv1.2_2021"
+  # }
+
+  aliases = [var.domain_name]
+
+  viewer_certificate {
+    acm_certificate_arn      = aws_acm_certificate_validation.cert_validation.certificate_arn
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   restrictions {
@@ -144,3 +151,19 @@ resource "aws_route53_record" "www" {
 output "cloudfront_domain_name" {
   value = aws_cloudfront_distribution.cdn.domain_name
 }
+
+#region ACM certificate
+resource "aws_acm_certificate" "ssl_certificate" {
+  domain_name       = var.domain_name
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_acm_certificate_validation" "cert_validation" {
+  certificate_arn         = aws_acm_certificate.ssl_certificate.arn
+  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
+}
+#endregion

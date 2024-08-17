@@ -48,6 +48,10 @@ variable "other_az" {
   type        = string
   default = "us-west-1"
 }
+variable "domain_name" {
+  type        = string
+  description = "The domain name for the website"
+}
 #outputs
 
 # output "web_instance_public_ip" {
@@ -61,3 +65,6 @@ variable "other_az" {
 # output "db_instance_endpoint" {
 #   value = aws_db_instance.default.endpoint
 # }
+output "website_url" {
+  value = "https://${var.domain_name}"
+}
