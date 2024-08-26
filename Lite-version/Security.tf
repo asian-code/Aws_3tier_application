@@ -23,16 +23,17 @@ resource "aws_vpc_security_group_egress_rule" "public_allow_all_dbsg" {
 resource "aws_vpc_security_group_ingress_rule" "public_allow_http_ipv4" {
   security_group_id = aws_security_group.public_sg.id
   cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
+  from_port         = 3000
   ip_protocol       = "tcp"
-  to_port           = 80
+  to_port           = 3000
 }
-resource "aws_vpc_security_group_ingress_rule" "public_allow_tls_ipv4" {
+# Ec2 connect service
+resource "aws_vpc_security_group_ingress_rule" "public_allow_http_ipv4" {
   security_group_id = aws_security_group.public_sg.id
-  cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 443
+  cidr_ipv4         = "3.16.146.0/29"
+  from_port         = 22
   ip_protocol       = "tcp"
-  to_port           = 443
+  to_port           = 22
 }
 #endregion 
 #region db SG ---

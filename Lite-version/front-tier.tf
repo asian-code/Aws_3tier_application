@@ -7,21 +7,27 @@ resource "aws_s3_bucket" "static_website" {
   }
 }
 # upload index file to s3
-resource "aws_s3_object" "index" {
-  bucket       = aws_s3_bucket.static_website.id
-  key          = "index.html"
-  source       = "index.html"
-  content_type = "text/html"
-  etag         = filemd5("index.html")
-}
-# uplaod error file to s3
-resource "aws_s3_object" "error" {
-  bucket       = aws_s3_bucket.static_website.id
-  key          = "error.html"
-  source       = "error.html"
-  content_type = "text/html"
-  etag         = filemd5("index.html")
-}
+# resource "aws_s3_object" "index" {
+#   bucket       = aws_s3_bucket.static_website.id
+#   key          = "index.html"
+#   source       = "index.html"
+#   content_type = "text/html"
+#   etag         = filemd5("index.html")
+# }
+# Data resource to list all files in the local directory --------------------------------
+# data "local_file" "files" {
+#   for_each = fileset("C:/Users/admin/Documents/HashStudio_nodejs_api/HashStudiosPatreonSupport_Private-main/HashStudiosPatreonSupport_Private-main/public", "**")
+#   filename = each.value
+# }
+
+
+# resource "aws_s3_object" "files" {
+#   for_each = data.local_file.files
+
+#   bucket = aws_s3_bucket.static_website.id
+#   key    = each.value
+#   source = data.local_file.files[each.key].filename
+# }
 # S3 Web hosting
 resource "aws_s3_bucket_website_configuration" "website_config" {
   bucket = aws_s3_bucket.static_website.id
@@ -30,7 +36,7 @@ resource "aws_s3_bucket_website_configuration" "website_config" {
     suffix = "index.html"
   }
   error_document {
-    key = "error.html"
+    key = "err_404.html"
   }
 }
 resource "aws_s3_bucket_public_access_block" "access" {
@@ -106,21 +112,23 @@ resource "aws_cloudfront_distribution" "cdn" {
 
   price_class = "PriceClass_100"
 
-  # viewer_certificate {
-  #   cloudfront_default_certificate = true
-  #   # Remove the following lines if you're not using a custom SSL certificate
-  #   # acm_certificate_arn      = var.certificate_arn
-  #   # ssl_support_method       = "sni-only"
-  #   # minimum_protocol_version = "TLSv1.2_2021"
-  # }
-
-  aliases = [var.domain_name]
-
   viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate_validation.cert_validation.certificate_arn
-    ssl_support_method       = "sni-only"
-    minimum_protocol_version = "TLSv1.2_2021"
+    cloudfront_default_certificate = true
+    # Remove the following lines if you're not using a custom SSL certificate
+    # acm_certificate_arn      = var.certificate_arn
+    # ssl_support_method       = "sni-only"
+    # minimum_protocol_version = "TLSv1.2_2021"
   }
+
+  # with domain------------------
+
+  # aliases = [var.domain_name]
+
+  # viewer_certificate {
+  #   acm_certificate_arn      = aws_acm_certificate_validation.cert_validation.certificate_arn
+  #   ssl_support_method       = "sni-only"
+  #   minimum_protocol_version = "TLSv1.2_2021"
+  # }
 
   restrictions {
     geo_restriction {
@@ -151,7 +159,10 @@ resource "aws_route53_record" "www" {
 output "cloudfront_domain_name" {
   value = aws_cloudfront_distribution.cdn.domain_name
 }
-
+output "acm_certificate_domain_validation_options" {
+  value       = aws_acm_certificate.ssl_certificate.domain_validation_options
+  description = "Domain validation options for ACM certificate"
+}
 #region ACM certificate
 resource "aws_acm_certificate" "ssl_certificate" {
   domain_name       = var.domain_name
@@ -162,8 +173,8 @@ resource "aws_acm_certificate" "ssl_certificate" {
   }
 }
 
-resource "aws_acm_certificate_validation" "cert_validation" {
-  certificate_arn         = aws_acm_certificate.ssl_certificate.arn
-  validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
-}
+# resource "aws_acm_certificate_validation" "cert_validation" {
+#   certificate_arn         = aws_acm_certificate.ssl_certificate.arn
+#   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
+# }
 #endregion
