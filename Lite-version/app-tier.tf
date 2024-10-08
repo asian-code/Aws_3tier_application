@@ -28,53 +28,12 @@ resource "aws_instance" "main" {
   tags = {
     Name = "api-vm"
   }
-# user_data = <<-EOF
-#     #!/bin/bash
-#     # Update the package manager and install necessary tools
-#     apt update -y
-#     apt install -y git curl
-
-#     # Install Node.js and npm
-#     curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
-#     apt install -y nodejs
-
-#     # Clone the GitHub repository
-#     git clone https://github.com/yourusername/your-repo.git /home/ubuntu/app
-
-#     # Change to the application directory
-#     cd /home/ubuntu/app
-
-#     # Install application dependencies
-#     npm install
-
-#     # Set up the application to run on startup
-#     cat <<EOF > /etc/systemd/system/nodeapp.service
-#     [Unit]
-#     Description=Node.js API Server
-#     After=network.target
-
-#     [Service]
-#     ExecStart=/usr/bin/node /home/ubuntu/app/index.js
-#     Restart=always
-#     User=ubuntu
-#     Group=ubuntu
-#     Environment=PATH=/usr/bin:/usr/local/bin
-#     Environment=NODE_ENV=production
-#     WorkingDirectory=/home/ubuntu/app
-
-#     [Install]
-#     WantedBy=multi-user.target
-#     EOF
-
-#     # Reload systemd to recognize the new service
-#     systemctl daemon-reload
-
-#     # Start and enable the Node.js application service
-#     systemctl start nodeapp
-#     systemctl enable nodeapp
-
-#     # Clean up
-#     rm -rf /home/ubuntu/app/.git
-#   EOF
+ 
 }
+  output "instance_public_ip" {
+  description = "The public IP address of the API-VM EC2 instance"
+  value       = aws_instance.main.public_ip
+}
+
+
 #endregion

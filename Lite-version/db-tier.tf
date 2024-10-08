@@ -8,10 +8,10 @@
 * db monitoring - metrics: cpu, memeory, storage
 */
 resource "aws_db_instance" "default" {
-  allocated_storage       = 20
+  allocated_storage       = 15
   db_name                 = "mydb"
   engine                  = "mysql"
-  engine_version          = "8.0.34"
+  engine_version          = "8.0.35"
   instance_class          = "db.t3.micro"
   username                = var.db_username
   password                = var.db_password

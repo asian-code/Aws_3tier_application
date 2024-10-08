@@ -28,7 +28,7 @@ resource "aws_vpc_security_group_ingress_rule" "public_allow_http_ipv4" {
   to_port           = 3000
 }
 # Ec2 connect service
-resource "aws_vpc_security_group_ingress_rule" "public_allow_http_ipv4" {
+resource "aws_vpc_security_group_ingress_rule" "allow-ec2-connect" {
   security_group_id = aws_security_group.public_sg.id
   cidr_ipv4         = "3.16.146.0/29"
   from_port         = 22
