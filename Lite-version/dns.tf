@@ -34,6 +34,7 @@ resource "aws_route53_record" "backend" { # point to alb that translates port 80
   zone_id = aws_route53_zone.main.zone_id
   name    = "benefits-backend"
   type    = "A"
+  ttl     = 300
   records = [aws_instance.main.public_ip]  # Reference to EC2 instance's public IP
 }
 resource "aws_route53_record" "frontend" { # Point to cloudfront
