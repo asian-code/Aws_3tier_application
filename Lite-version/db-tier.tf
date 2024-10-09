@@ -8,7 +8,7 @@
 * db monitoring - metrics: cpu, memeory, storage
 */
 resource "aws_db_instance" "default" {
-  allocated_storage       = 15
+  allocated_storage       = 20
   db_name                 = "mydb"
   engine                  = "mysql"
   engine_version          = "8.0.35"

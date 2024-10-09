@@ -68,7 +68,6 @@ output "s3_website_endpoint" {
 #endregion
 
 #region CloudFront Distribution
-
 resource "aws_cloudfront_distribution" "cdn" {
   origin {
     # domain_name = aws_s3_bucket.static_website.website_endpoint (deprecated)
@@ -83,7 +82,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  # Cache behavior for /user.html (requires signed cookies)
+  # Cache behavior for /user.html (requires signed cookies/URL)
   ordered_cache_behavior {
     path_pattern     = "/user.html"
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
@@ -109,7 +108,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     trusted_key_groups=["5c4e2eba-d6c2-4a0a-aae4-86337b6b7d87"]
   }
 
-  # for all other paths
+  # for all other behavior paths
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
@@ -161,20 +160,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 }
 #endregion
-/*
-resource "aws_route53_record" "www" {
-  zone_id = var.hosted_zone_id
-  name    = var.domain_name
-  type    = "A"
 
-  alias {
-    name                   = aws_cloudfront_distribution.cdn.domain_name
-    zone_id                = aws_cloudfront_distribution.cdn.hosted_zone_id
-    evaluate_target_health = false
-  }
-}
-/*
-*/
 # Output the CloudFront URL
 output "cloudfront_domain_name" {
   value = aws_cloudfront_distribution.cdn.domain_name
