@@ -82,6 +82,17 @@ resource "aws_cloudfront_distribution" "cdn" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
+
+  #region with domain------------------
+
+  aliases = [ "benefits.${var.domain_name}" ]
+
+  viewer_certificate {
+    acm_certificate_arn      = "arn:aws:acm:us-east-1:767397882339:certificate/1570a4ef-fdd3-4ab6-97a7-92f5bbae6fd7"
+    ssl_support_method       = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
+  }
+  #endregion
   # Cache behavior for /user.html (requires signed cookies/URL)
   ordered_cache_behavior {
     path_pattern     = "/user.html"
@@ -130,24 +141,12 @@ resource "aws_cloudfront_distribution" "cdn" {
     compress               = true  # Enable automatic object compression
 
   }
-
-  viewer_certificate {
-    cloudfront_default_certificate = true
-    # Remove the following lines if you're not using a custom SSL certificate
-    # acm_certificate_arn      = var.certificate_arn
-    # ssl_support_method       = "sni-only"
-    # minimum_protocol_version = "TLSv1.2_2021"
-  }
-
-  # with domain------------------
-
-  # aliases = [var.domain_name]
-
+ # for default cloudfront domain
   # viewer_certificate {
-  #   acm_certificate_arn      = aws_acm_certificate_validation.cert_validation.certificate_arn
-  #   ssl_support_method       = "sni-only"
-  #   minimum_protocol_version = "TLSv1.2_2021"
+  #   cloudfront_default_certificate = true
   # }
+
+
 
   restrictions {
     geo_restriction {
@@ -165,20 +164,28 @@ resource "aws_cloudfront_distribution" "cdn" {
 output "cloudfront_domain_name" {
   value = aws_cloudfront_distribution.cdn.domain_name
 }
+
+
+# arn:aws:acm:us-east-1:767397882339:certificate/1570a4ef-fdd3-4ab6-97a7-92f5bbae6fd7
+
+
 # output "acm_certificate_domain_validation_options" {
 #   value       = aws_acm_certificate.ssl_certificate.domain_validation_options
 #   description = "Domain validation options for ACM certificate"
 # }
 #region ACM certificate
-# resource "aws_acm_certificate" "ssl_certificate" {
-#   domain_name       = var.domain_name
+# resource "aws_acm_certificate" "SSLcert" {
+#   domain_name       = "*.${var.domain_name}"
 #   validation_method = "DNS"
 
 #   lifecycle {
 #     create_before_destroy = true
 #   }
 # }
-
+# import {
+#   to = aws_acm_certificate.SSLcert
+#   id = "arn:aws:acm:us-east-1:767397882339:certificate/1570a4ef-fdd3-4ab6-97a7-92f5bbae6fd7"
+# }
 # resource "aws_acm_certificate_validation" "cert_validation" {
 #   certificate_arn         = aws_acm_certificate.ssl_certificate.arn
 #   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
