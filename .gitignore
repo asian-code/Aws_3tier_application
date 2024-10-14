@@ -27,3 +27,12 @@ override.tf.json
 terraform.rc
 # aws access keys
 eric_accessKeys.csv
+
+# lambda zip files
+*.zip
+
+# terraform windows binary
+*.exe
+
+# nodejs modules
+node_modules/
