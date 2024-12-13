@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Error Page</title>
+    <link rel="stylesheet" href="custom.css">
+    <link rel="icon" type="image/x-icon" href="https://benefits.hashstudiosllc.com/images/favicon.ico">
+</head>
+<body>
+    <header id="header"><div class="header-content">
+    <a href="https://benefits.hashstudiosllc.com/">
+        <img src="./images/banner.png" alt="Banner" href="https://hashstudiosllc.com" class="header-image" height="40px">
+    </a>
+    <h2 class="header-text"></h2>
+    <div class="header-buttons">
+        <a href="https://www.hashstudiosllc.com/">
+            <button class="header-button">
+                <img src="./images/home_white.png" height="17px" width="17px">
+                <span>Website</span>
+            </button>
+        </a>
+        <a href="https://hash-studios-llc.github.io/DevelopmentDocumentation/">
+            <button class="header-button">
+                <img src="./images/document_white.png" height="17px" width="17px">
+                <span>Documentation</span>
+            </button>
+        </a>
+        <a href="https://discord.gg/78EnuECcY4">
+            <button class="header-button">
+                <img src="./images/discord_white.png" height="13px" width="17px">
+                <span>Discord</span>
+            </button>
+        </a>
+    </div>
+</div>
+</header>
+    <div class="center">
+        <div class="spacer-20"></div>
+        <h1>Internal Submission Error</h1>
+        <div class="spacer-40"></div>
+        <img src="./images/ayumi_think.png" alt="ayumiicon" width="200px" height="200px">
+        <div class="spacer-40"></div>
+        <p>It appears the something went wrong on our end.<br>This is likely because our database or internal server is disabled. Please try again. <br><br> If the issue persists, please contact us on our Discord.<br>If our Discord is unavailable, please contact us <a href="https://hashstudiosllc.com/">here</a>.</p>
+        <div class="spacer-40"></div>
+        <button class="button-outline" onclick="window.location.href=&#39;/&#39;">
+            <span>Back to Main Page</span>
+        </button>
+        <div class="spacer-40"></div>
+    </div>
+    <footer id="footer"><p>Hash Studios LLC © 2024</p></footer>
+    <script>
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+            });
+
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+    </script>
+
+
+</body></html>

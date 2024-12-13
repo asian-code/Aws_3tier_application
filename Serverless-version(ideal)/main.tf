@@ -18,7 +18,7 @@ variable "env_vars" {
 resource "aws_apigatewayv2_api" "gw" {
   name          = "myapi"
   protocol_type = "HTTP"
-  description   = "API Gateway for Lambda integration"
+  description   = "API Gateway for Serverless Lambda integration"
   tags = {
     Cost : "Serverless"
   }

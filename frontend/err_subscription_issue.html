@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <link rel="stylesheet" href="custom.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+    <header id="header"></header>
+    <div class="center">
+        <div class="spacer-20"></div>
+        <h1>No Subscription Found</h1>
+        <div class="spacer-40"></div>
+        <img src="/images/ayumi_cry.png" alt="ayumiicon" width="200px" height="200px">
+        <div class="spacer-40"></div>
+        <p>It appears you have not subscribed to our patreon. </br>Please subscribe to gain access! </br></br> If you believe this is an error, please contact us on our Discord.</br>If our Discord is unavailable, please contact us <a href="https://hashstudiosllc.com">here</a>.</p>
+        <div class="spacer-40"></div>
+        <button class="button-outline" onclick="window.location.href='/'">
+            <span>Back to Main Page</span>
+        </button>
+        <div class="spacer-40"></div>
+    </div>
+    <footer id="footer"></footer>
+    <script>
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+            });
+
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

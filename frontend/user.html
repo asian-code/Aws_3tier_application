@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hash Studios: Patreon Submission Form</title>
+    <link rel="stylesheet" href="custom.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+    <header id="header"></header>
+    <div class="center">
+        <img src="/images/ayumi_wave.png" alt="ayumiwave" width="200px" height="200px">
+        <div class="spacer-40"></div>
+        <form id="userForm">
+            <div class="form-group">
+                <div>
+                    <label for="username">VRChat Username:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="spacer-20"></div>
+                <small>Enter your VRChat username. Note: It is case-sensitive, and spelling matters!</small>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="display">Display Name:</label>
+                    <input type="text" id="display" name="display" required>
+                </div>
+                <div class="spacer-20"></div>
+                <small>Enter your display name. 
+                </br>This can be anything, just make sure it's appropriate!.</small>
+            </div>
+            <div class="form-group">
+                <div>
+                    <label for="url">Poster URL:</label>
+                    <input type="text" id="url" name="url" required>
+                </div>
+                <div class="spacer-20"></div>
+                <small>Enter a URL to your poster image here.
+                </br>The image must be 1920x1080 and from one of the following domains: 
+                <div class="centered-container">    
+                    <ul class="centered-list">
+                        <li>cdn.discordapp.com</li>
+                        <li>dl.dropbox.com</li>
+                        <li>*.github.io</li>
+                        <li>images4.imagebam.com</li>
+                        <li>i.ibb.co</li>
+                        <li>images2.imgbox.com</li>
+                        <li>i.imgur.com</li>
+                        <li>i.postimg.cc</li>
+                        <li>i.redd.it</li>
+                        <li>pbs.twimg.com</li>
+                        <li>assets.vrchat.com</li>
+                    </ul>
+                </div>
+                </small>
+            </div>
+            <div class="spacer-20"></div>
+            <button class="button-outline" type="submit">Submit Form</button>
+        </form>
+    </div>
+    <footer id="footer"></footer>
+    
+    <script>
+        let apiBaseUrl;
+
+        // Fetch config.json to get the apiBaseUrl
+        fetch('config.json')
+            .then(response => response.json())
+            .then(config => {
+                apiBaseUrl = config.apiBaseUrl;
+
+                // Handle form submission
+                document.getElementById('userForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const username = document.getElementById('username').value;
+                    const display = document.getElementById('display').value;
+                    const url = document.getElementById('url').value;
+
+                    try {
+                        const response = await fetch(`${apiBaseUrl}/submit`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ username, display, url }),
+                        });
+
+                        if (response.redirected) {
+                            window.location.href = response.url; // Redirect to the success page
+                        } else {
+                            console.error('Error submitting data:', await response.text());
+                        }
+                    } catch (error) {
+                        console.error('Fetch error:', error);
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading config.json:', error));
+
+        // Fetch header and footer content
+        fetch('/header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header').innerHTML = data;
+            });
+
+        fetch('/footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

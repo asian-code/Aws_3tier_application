@@ -1,0 +1,330 @@
+/* Base styles */
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #282c34;
+    color: #abb2bf;
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Ensure no scrollbars appear */
+}
+
+header {
+    background-color: #20232a;
+    padding: 25px;
+    display: flex;
+    justify-content: space-between; /* Space out elements in the header */
+    align-items: center; /* Center items vertically */
+    color: #ffffff;
+}
+
+.header-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.header-image {
+    margin-right: 10px; /* Space between the image and text */
+}
+
+.header-buttons {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+    margin-left: 10px; /* Space between text and buttons */
+}
+
+.header-button {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header-button:hover {
+    border-color: #ffffff;
+    color: #ffffff;
+    background-color: #2e9dc0;
+}
+
+.header-text {
+    flex: 1;
+    text-align: center;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff;
+}
+
+p {
+    line-height: 1.6;
+}
+
+a{
+    text-decoration: none;
+    color: #2e9dc0;
+}
+
+.signup-text{
+    color: #2e9dc0;
+    text-align: center;
+    font-size: 13px;
+}
+
+/* Button styles */
+.button-fill {
+    background-color: #ffffff;
+    color: #20232a;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.button-outline {
+    border: 2px solid black;
+    border-color: #2e9dc0;
+    color: #2e9dc0;
+    background-color: #ffffff00;
+    padding: 14px 28px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    border-color: #ffffff;
+    color: #ffffff;
+    background-color: #2e9dc0;
+}
+
+button img {
+    margin-right: 8px;
+    display: inline-block; 
+    vertical-align: middle;
+}
+
+/* Footer styles */
+footer {
+    background-color: #20232a;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.background-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -2; /* Places it behind other elements */
+}
+
+.center {
+    flex: 1 1 auto; /* Allow the center to grow and shrink */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh; /* Adjust as needed */
+    flex-direction: column;
+    text-align: center;
+    position: relative;
+    z-index: 0; /* Ensures it is above the background */
+    overflow-y: auto;
+    padding: 20px; /* Add some padding */
+}
+
+.spacer-20 {
+    height: 20px; /* Adjust the height of the space as needed */
+}
+
+.spacer-40 {
+    height: 40px; /* Adjust the height of the space as needed */
+}
+
+/* Particles container */
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.image {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    height: 50%;
+}
+
+.image25 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 25%;
+    height: 25%;
+}
+
+.image50 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    height: 50%;
+}
+
+.image75 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    height: 75%;
+}
+
+.image100 {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.image25-left {
+    display: block;
+    margin-left: left;
+    margin-right: auto;
+    width: 25%;
+    height: 25%;
+}
+
+.image50-left {
+    display: block;
+    margin-left: left;
+    margin-right: auto;
+    width: 50%;
+    height: 50%;
+}
+
+.image75-left {
+    display: block;
+    margin-left: left;
+    margin-right: auto;
+    width: 75%;
+    height: 75%;
+}
+
+.image100-left {
+    display: block;
+    margin-left: left;
+    margin-right: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.scaled-image {
+    width: 40%;
+    height: auto;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.image-container .imageBlock {
+    flex: 1 1 30%; /* Adjust the percentage to control the number of images per row */
+    max-width: 30%;
+    padding: 10px;
+    box-sizing: border-box; /* Ensures padding is included in the width calculation */
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #2e9dc0;
+    padding: 10px;
+    margin-bottom: 10px;
+    width: 500px; /* Adjust width as needed */
+}
+
+.form-group > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 96%;
+}
+
+form label {
+    margin-right: 10px;
+    flex: 1;
+    text-align: right;
+}
+
+form input {
+    flex: 2;
+    padding: 5px;
+    border: 1px solid #abb2bf;
+    border-radius: 4px;
+    outline: none;
+}
+
+form small {
+    color: #abb2bf;
+    font-size: 12px;
+    margin-top: 5px;
+    /*align-self: flex-start; /* Align small text to the start of the form group */
+    text-align: center;
+}
+
+.centered-container {
+    display: flex;
+    justify-content: center;
+  }
+
+ul.centered-list {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    display: inline-block;
+}
+
+ul.centered-list li {
+    position: relative;
+    padding-left: 20px;
+}
+
+ul.centered-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+}
